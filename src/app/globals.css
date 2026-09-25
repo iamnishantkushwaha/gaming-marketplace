@@ -1,0 +1,141 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+html,
+body {
+  background-color: #1a1d28;
+  color: #f0f1f4;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #454b5e transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: #454b5e;
+  border-radius: 8px;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background-color: #5b6278;
+}
+
+::selection {
+  background-color: rgba(232, 99, 15, 0.35);
+  color: #fff;
+}
+
+/* ---------- Surfaces ---------- */
+
+@layer components {
+  .gt-card {
+    @apply relative bg-base-850 border border-base-700/80 rounded-xl shadow-card;
+  }
+
+  .gt-card-hover {
+    @apply transition-colors duration-150 hover:border-base-500;
+  }
+
+  .gt-panel {
+    @apply bg-base-900/60 border border-base-700/60 rounded-xl;
+  }
+
+  /* ---------- Form controls ---------- */
+
+  .gt-input {
+    @apply bg-base-900 border border-base-600 rounded-lg px-3 py-2 text-sm text-base-100 placeholder:text-base-400 outline-none transition-all duration-150 w-full;
+    @apply focus:border-brand-500 focus:ring-2 focus:ring-brand-500/25;
+  }
+
+  .gt-input:hover:not(:focus):not(:disabled) {
+    @apply border-base-500;
+  }
+
+  .gt-label {
+    @apply mb-1.5 block text-xs font-medium text-base-300;
+  }
+
+  /* ---------- Buttons ---------- */
+
+  .gt-btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-white;
+    @apply bg-brand-500;
+    @apply transition-colors duration-150 hover:bg-brand-400;
+    @apply active:bg-brand-600;
+    @apply disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-brand-500;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400/50 focus-visible:ring-offset-2 focus-visible:ring-offset-base-950;
+  }
+
+  .gt-btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-base-800 border border-base-600 text-base-100 text-sm font-medium px-4 py-2;
+    @apply transition-colors duration-150 hover:bg-base-700 hover:border-base-500;
+    @apply disabled:opacity-40 disabled:cursor-not-allowed;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400/40 focus-visible:ring-offset-2 focus-visible:ring-offset-base-950;
+  }
+
+  .gt-btn-destructive {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-accent-rose/10 border border-accent-rose/30 text-accent-rose text-sm font-medium px-4 py-2;
+    @apply transition-colors duration-150 hover:bg-accent-rose/20 hover:border-accent-rose/50;
+    @apply disabled:opacity-40 disabled:cursor-not-allowed;
+  }
+
+  .gt-btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg hover:bg-base-800 text-base-200 text-sm font-medium px-3 py-2 transition-colors duration-150;
+  }
+
+  .gt-link {
+    @apply text-brand-400 hover:text-brand-300 transition-colors duration-150 underline-offset-4 hover:underline;
+  }
+
+  /* ---------- Typography helpers ---------- */
+
+  .gt-page-title {
+    @apply text-xl font-semibold tracking-tightish text-base-100;
+  }
+
+  .gt-eyebrow {
+    @apply text-xs font-semibold uppercase tracking-wider text-base-400;
+  }
+
+  .gt-stat-value {
+    @apply text-2xl font-bold tracking-tightish text-base-100;
+  }
+}
+
+/* ---------- Motion ---------- */
+
+.animate-fade-in {
+  animation: fadeIn 0.18s ease-out;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+.gt-skeleton {
+  background: linear-gradient(90deg, #282c3a 25%, #343948 37%, #282c3a 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.4s ease infinite;
+}
