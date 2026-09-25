@@ -48,7 +48,7 @@ export default function SellerOrderDetailPage() {
   function messageBuyer() {
     let conv = existingConv;
     if (!conv) {
-      conv = { id: genId("conv"), participantIds: [user.id, buyer.id], relatedOrderId: order!.id, relatedListingId: listing!.id, lastMessageAt: nowIso() };
+      conv = { id: genId("conv"), participantIds: [user!.id, buyer!.id], relatedOrderId: order!.id, relatedListingId: listing!.id, lastMessageAt: nowIso() };
       dispatch({ type: "START_CONVERSATION", conversation: conv });
     }
     router.push(`/seller/messages/${conv.id}`);

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useApp, useListingById } from "@/lib/store";
+import { Listing } from "@/lib/types";
 import { StatusBadge } from "@/components/ui/Badge";
 import { Switch } from "@/components/ui/Switch";
 import { ConfirmDialog } from "@/components/ui/Modal";
@@ -21,7 +22,7 @@ export default function SellerListingDetailPage() {
   const orderCount = state.orders.filter((o) => o.listingId === listing.id).length;
   const conversion = listing.views > 0 ? ((orderCount / listing.views) * 100).toFixed(1) : "0.0";
 
-  function field(key: keyof typeof listing, label: string, type: "text" | "textarea" | "number" = "text") {
+  function field(key: keyof Listing, label: string, type: "text" | "textarea" | "number" = "text") {
     const value = listing![key] as any;
     return (
       <div>
@@ -56,7 +57,7 @@ export default function SellerListingDetailPage() {
   }
 
   function deleteListing() {
-    dispatch({ type: "DELETE_LISTING", listingId: listing.id });
+    dispatch({ type: "DELETE_LISTING", listingId: listing!.id });
     router.push("/seller/listings");
     toast("Listing deleted");
   }
