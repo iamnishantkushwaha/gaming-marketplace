@@ -244,7 +244,7 @@ export function AppShell({
         </div>
       )}
 
-      <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:py-8">{children}</main>
+      <main className="mx-auto w-full max-w-[1600px] flex-1 px-4 py-6 sm:px-6 sm:py-8 lg:px-8">{children}</main>
 
       <footer className="border-t border-base-800 py-8 text-center text-xs text-base-500">
         GameTrade demo build — mock data only, no real payments or authentication.

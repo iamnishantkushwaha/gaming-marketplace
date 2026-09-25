@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { ShieldCheck } from "lucide-react";
 import { useApp, useBalance, useCurrentUser } from "@/lib/store";
 import { Tabs } from "@/components/ui/Tabs";
 import { Modal, ConfirmDialog } from "@/components/ui/Modal";
@@ -28,6 +29,14 @@ export default function WalletPage() {
   const myTx = state.transactions.filter((t) => t.userId === user?.id);
   const filteredTx = typeFilter === "All" ? myTx : myTx.filter((t) => t.type === typeFilter);
   const myMethods = state.paymentMethods.filter((m) => m.userId === user?.id);
+  const defaultMethod = myMethods.find((m) => m.isDefault) ?? myMethods[0];
+
+  const summary = useMemo(() => {
+    const totalSpent = myTx.filter((t) => t.type === "Purchase").reduce((s, t) => s + Math.abs(t.amount), 0);
+    const totalTopUps = myTx.filter((t) => t.type === "Top-up").reduce((s, t) => s + t.amount, 0);
+    const orderCount = state.orders.filter((o) => o.buyerId === user?.id).length;
+    return { totalSpent, totalTopUps, orderCount };
+  }, [myTx, state.orders, user]);
 
   function addFunds() {
     const amt = Number(amount) || 0;
@@ -57,22 +66,24 @@ export default function WalletPage() {
   }
 
   return (
-    <div className="max-w-3xl space-y-6">
+    <div className="space-y-6">
       <h1 className="gt-page-title">Wallet</h1>
 
-      <div className="gt-card p-6 flex items-center justify-between flex-wrap gap-4">
-        <div>
-          <p className="text-xs text-base-400">Available balance</p>
-          <p className="text-3xl font-bold tracking-tightish text-base-100">{money(balance)}</p>
-        </div>
-        <button onClick={() => setAddFundsOpen(true)} className="gt-btn-primary">
-          Add funds
-        </button>
-      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 space-y-6">
+          <div className="gt-card p-6 flex items-center justify-between flex-wrap gap-4">
+            <div>
+              <p className="text-xs text-base-400">Available balance</p>
+              <p className="text-3xl font-bold tracking-tightish text-base-100">{money(balance)}</p>
+            </div>
+            <button onClick={() => setAddFundsOpen(true)} className="gt-btn-primary">
+              Add funds
+            </button>
+          </div>
 
-      <Tabs value={tab} onChange={setTab} tabs={[{ label: "Transactions", value: "Transactions" }, { label: "Payment methods", value: "Payment methods" }]} />
+          <Tabs value={tab} onChange={setTab} tabs={[{ label: "Transactions", value: "Transactions" }, { label: "Payment methods", value: "Payment methods" }]} />
 
-      {tab === "Transactions" && (
+          {tab === "Transactions" && (
         <div className="space-y-4">
           <Select
             className="w-48"
@@ -132,6 +143,42 @@ export default function WalletPage() {
           </button>
         </div>
       )}
+        </div>
+
+        <div className="space-y-4">
+          <div className="gt-card p-5 space-y-3">
+            <h2 className="gt-eyebrow">Wallet summary</h2>
+            <SummaryRow label="Total spent" value={money(summary.totalSpent)} />
+            <SummaryRow label="Total top-ups" value={money(summary.totalTopUps)} />
+            <SummaryRow label="Orders placed" value={String(summary.orderCount)} />
+          </div>
+
+          <div className="gt-card p-5 space-y-2">
+            <h2 className="gt-eyebrow">Default payment method</h2>
+            {defaultMethod ? (
+              <p className="text-sm text-base-200">
+                {defaultMethod.label} {defaultMethod.masked}
+              </p>
+            ) : (
+              <p className="text-sm text-base-400">No payment method saved yet.</p>
+            )}
+            <button onClick={() => setTab("Payment methods")} className="gt-link text-xs font-medium">
+              Manage payment methods
+            </button>
+          </div>
+
+          <div className="gt-card p-5 space-y-2">
+            <div className="flex items-center gap-2 text-sm font-medium text-base-100">
+              <ShieldCheck size={15} className="text-accent-green shrink-0" />
+              Escrow protected
+            </div>
+            <p className="text-xs text-base-400 leading-relaxed">
+              Funds for every purchase are held in escrow until delivery is confirmed, so your balance is always
+              protected until you get what you paid for.
+            </p>
+          </div>
+        </div>
+      </div>
 
       <Modal
         open={addFundsOpen}
@@ -196,6 +243,15 @@ export default function WalletPage() {
         message="You can add it again later if needed."
         confirmLabel="Remove"
       />
+    </div>
+  );
+}
+
+function SummaryRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex items-center justify-between text-sm">
+      <span className="text-base-400">{label}</span>
+      <span className="font-medium text-base-100">{value}</span>
     </div>
   );
 }
