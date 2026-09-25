@@ -21,7 +21,7 @@ export function TBody({ children }: { children: React.ReactNode }) {
   return <tbody className="hidden md:table-row-group divide-y divide-base-700/70">{children}</tbody>;
 }
 
-export function Th({ children, className }: { children: React.ReactNode; className?: string }) {
+export function Th({ children, className }: { children?: React.ReactNode; className?: string }) {
   return <th className={clsx("px-4 py-3.5 font-semibold", className)}>{children}</th>;
 }
 

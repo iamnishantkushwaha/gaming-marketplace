@@ -73,7 +73,7 @@ export default function BuyerOrderDetailPage() {
     if (!conv) {
       conv = {
         id: genId("conv"),
-        participantIds: [user.id, seller.id],
+        participantIds: [user!.id, seller!.id],
         relatedOrderId: order!.id,
         relatedListingId: listing!.id,
         lastMessageAt: nowIso(),
@@ -89,8 +89,8 @@ export default function BuyerOrderDetailPage() {
       review: {
         id: genId("r"),
         orderId: order!.id,
-        authorId: user.id,
-        subjectId: seller.id,
+        authorId: user!.id,
+        subjectId: seller!.id,
         rating: reviewRating,
         comment: reviewComment,
         date: todayDate(),

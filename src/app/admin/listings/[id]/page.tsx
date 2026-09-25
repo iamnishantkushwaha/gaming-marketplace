@@ -88,7 +88,7 @@ export default function AdminListingDetailPage() {
             </div>
             <div className="flex items-center gap-2 text-sm text-base-300">
               <Calendar size={14} className="text-base-500 shrink-0" />
-              Listed {shortDate(listing.createdDate)}
+              Listed {shortDate(listing.createdAt)}
             </div>
           </div>
 

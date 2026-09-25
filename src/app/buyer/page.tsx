@@ -3,12 +3,12 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight, Gamepad2, Coins, TrendingUp, Wallet } from "lucide-react";
+import { ChevronLeft, ChevronRight, Gamepad2, Coins, TrendingUp, Wallet, type LucideIcon } from "lucide-react";
 import { useApp } from "@/lib/store";
 import { heroSlides, categoryTiles } from "@/lib/mock-data";
 import { ListingCard } from "@/components/shared/ListingCard";
 
-const categoryIcons: Record<string, React.ComponentType<{ size?: number; className?: string }>> = {
+const categoryIcons: Record<string, LucideIcon> = {
   Accounts: Gamepad2,
   Currency: Coins,
   Boosting: TrendingUp,

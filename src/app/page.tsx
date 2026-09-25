@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Gamepad2, ShoppingBag, Store, ShieldCheck, Headset, ArrowRight } from "lucide-react";
+import { Gamepad2, ShoppingBag, Store, ShieldCheck, Headset, ArrowRight, type LucideIcon } from "lucide-react";
 import { useApp, CURRENT_IDS } from "@/lib/store";
 import { Role } from "@/lib/types";
 
@@ -10,7 +10,7 @@ const roleCards: {
   title: string;
   userId: string;
   description: string;
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: LucideIcon;
   href: string;
   accent: string;
 }[] = [

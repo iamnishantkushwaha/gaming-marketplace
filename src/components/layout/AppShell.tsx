@@ -5,14 +5,14 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import clsx from "clsx";
-import { Bell, Menu, Search, Wallet, X, ChevronDown, Gamepad2 } from "lucide-react";
+import { Bell, Menu, Search, Wallet, X, ChevronDown, Gamepad2, type LucideIcon } from "lucide-react";
 import { useApp, useCurrentUser, useUnreadNotificationCount, useBalance } from "@/lib/store";
 import { relativeTime } from "@/lib/format";
 
 export interface NavItem {
   label: string;
   href: string;
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: LucideIcon;
 }
 
 export function AppShell({
@@ -48,6 +48,14 @@ export function AppShell({
     router.push(`/buyer/search?q=${encodeURIComponent(query)}`);
   }
 
+  function isNavActive(href: string) {
+    // The root/home link's href is a prefix of every other route in the
+    // section, so it must match exactly — otherwise it stays highlighted
+    // on every page.
+    if (href === homeHref) return pathname === href;
+    return pathname === href || pathname.startsWith(href + "/");
+  }
+
   return (
     <div className="min-h-screen flex flex-col">
       <header className="sticky top-0 z-40 border-b border-base-700/80 bg-base-950/80 backdrop-blur-md shadow-header">
@@ -78,7 +86,7 @@ export function AppShell({
 
           <nav className="hidden lg:flex items-center gap-0.5 ml-2">
             {navItems.map((item) => {
-              const active = pathname === item.href || pathname.startsWith(item.href + "/");
+              const active = isNavActive(item.href);
               return (
                 <Link
                   key={item.href}
@@ -225,20 +233,23 @@ export function AppShell({
               </form>
             )}
             <nav className="flex flex-col gap-0.5">
-              {navItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setDrawerOpen(false)}
-                  className={clsx(
-                    "flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
-                    pathname.startsWith(item.href) ? "bg-base-800 text-base-100" : "text-base-400 hover:bg-base-800/50 hover:text-base-200"
-                  )}
-                >
-                  <item.icon size={16} className={pathname.startsWith(item.href) ? "text-brand-400" : ""} />
-                  {item.label}
-                </Link>
-              ))}
+              {navItems.map((item) => {
+                const active = isNavActive(item.href);
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setDrawerOpen(false)}
+                    className={clsx(
+                      "flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+                      active ? "bg-base-800 text-base-100" : "text-base-400 hover:bg-base-800/50 hover:text-base-200"
+                    )}
+                  >
+                    <item.icon size={16} className={active ? "text-brand-400" : ""} />
+                    {item.label}
+                  </Link>
+                );
+              })}
             </nav>
           </div>
         </div>
